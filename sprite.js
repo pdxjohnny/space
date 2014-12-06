@@ -31,17 +31,9 @@ sprite.prototype.draw = function( ctx )
 		typeof this.x !== 'undefined' &&
 		typeof this.y !== 'undefined' )
 	{
-		if ( typeof this.angle !== 'undefined' )
-		{
-			ctx.drawRotatedImage( this.image, this.x,
-				this.y, this.angle );
-		}
-		else
-		{
-			ctx.drawImage( this.image,
-				this.x - this.image.width / 2,
-				this.y - this.image.height / 2 );
-		}
+		ctx.drawRotatedImage( this.image, this.x,
+			this.y, this.angle );
+		this.draw_shields( ctx );
 	}
 }
 
@@ -51,7 +43,7 @@ sprite.prototype.update = function( modifier )
 		typeof this.stats.x !== 'undefined' &&
 		typeof this.stats.y !== 'undefined' &&
 		Object.keys(this.stats.keys_down).length > 0 &&
-		this.angle_of() == 0 || this.angle_of() )
+		this.angle_of() )
 	{
 		var to_angle = this.angle_of() - this.angle;
 		if ( to_angle < 0 )
@@ -140,7 +132,42 @@ sprite.prototype.angle_of = function()
 	// Player holding right
 	else if ( 39 in this.stats.keys_down || 68 in this.stats.keys_down )
 	{
-		return 0;
+		return 360;
 	}
 	else return false;
+}
+
+sprite.prototype.draw_shields = function draw_shields( ctx )
+{
+	if ( this.stats.max_shield && this.stats.shield )
+	{
+		var size = this.image.width;
+		if ( this.image.height > this.image.width )
+		{
+			size = this.image.height;
+		}
+		ctx.beginPath();
+		ctx.arc( this.x,
+			this.y ,
+			size / 1.5,
+			0,
+			Math.PI * 2,
+			false );
+		ctx.closePath();
+		var color = this.shield_color();
+		ctx.fillStyle = "rgba( " + color + ", 0.1)";
+		ctx.fill();
+		ctx.strokeStyle = "rgb( " + color + " )";
+		ctx.stroke();
+	}
+}
+
+sprite.prototype.shield_color = function shield_color()
+{
+	if ( this.stats.shield / this.stats.max_shield >= 0.7 )
+		return "107, 169, 76";
+	else if ( this.stats.shield / this.stats.max_shield > 0.3 )
+		return "255, 247, 100";
+	else
+		return "217, 108, 85";
 }

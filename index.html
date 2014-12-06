@@ -54,13 +54,29 @@ Author: John Andersen
 	<script src="ui.js" ></script>
 	<script src="sprite.js" ></script>
 	<script src="player.js" ></script>
+	<script src="stars.js" ></script>
+	<script src="space.js" ></script>
 	<script src="create.js" ></script>
 
 </head>
+
+<div id="top_bar" style="
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index:99;">
+test
+</div>
+
+
+
+<canvas id="game_canvas" ></canvas>
+
+<!--
 <body>
 
-	<!-- Primary Page Layout
-	================================================== -->
 
 	<div id="menu" class="container" style="top: 30px; z-index:990; background-color: rgba(255, 255, 255, 0.6);">
 
@@ -96,7 +112,7 @@ Author: John Andersen
 				<br>
 				Password: <input id="password" placeholder="password" type="password" />
 				<center>
-					<button onclick="space.add_player('thorjohn');space.control('thorjohn');$(this.parentElement.parentElement.parentElement.parentElement).hide()" >Start</button>
+					<button onclick="main_game.add_player('thorjohn');main_game.control('thorjohn');$(this.parentElement.parentElement.parentElement.parentElement).hide()" >Start</button>
 				</center>
 			</div>
 		</div>
@@ -125,11 +141,8 @@ Author: John Andersen
 			</div>
 		</div>
 
-	</div><!-- container -->
+	</div><
 
-
-<!-- End Document
-================================================== -->
 </body>
 
 <script>
@@ -168,15 +181,14 @@ body {
 	}
 </style>
 
+-->
 </html>
-
-<canvas id="game_canvas" ></canvas>
-
 <script>
-space = new game( 'game_canvas' );
-space.start();
+main_game = new space( 'game_canvas' );
+creator = new create( 'game_canvas' );
+main_game.start();
 
-// space.on_screen['thorjohn'] = new player( 'thorjohn' );
-// space.control( space.on_screen['thorjohn'] );
-// space.on_screen['pdxjohnny'] = new player( 'pdxjohnny' );
+main_game.add_player( 'thorjohn' );
+main_game.control( 'thorjohn' );
+main_game.add_player( 'pdxjohnny' );
 </script>

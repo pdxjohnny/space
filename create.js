@@ -1,12 +1,12 @@
-var create = function create( canvas )
+var create = function create ( canvas_div_id )
 {
-	this.ctx = canvas;
+	this.set_canvas( canvas_div_id );
 }
 
 create.prototype = new game();
 create.prototype.constructor = create;
 
-create.prototype.upload_ship = function()
+create.prototype.get_image = function()
 {
 
 }
