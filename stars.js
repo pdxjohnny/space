@@ -37,12 +37,13 @@ star_field.prototype.draw = function( ctx )
 star_field.prototype.update = function( modifier )
 {
 	this.blink( modifier );
-	if ( this.game.canvas_div && this.game.player &&
+	if ( ( this.game.canvas_div && this.game.player &&
 		typeof this.game.player.stats.speed !== 'undefined' &&
 		typeof this.game.player.stats.x !== 'undefined' &&
-		typeof this.game.player.stats.y !== 'undefined' &&
-		this.game.player.angle_of() &&
+		typeof this.game.player.stats.y !== 'undefined' ) &&
+		( ( this.game.player.angle_of() &&
 		Object.keys(this.game.player.stats.keys_down).length > 0 )
+		|| this.game.player.stats.speed > 0 ) )
 	{
 		for( var star in this.stars )
 		{
@@ -50,6 +51,7 @@ star_field.prototype.update = function( modifier )
 				* this.game.player.stats.speed * modifier;
 			this.stars[star].y -= Math.sin( this.game.player.angle * Math.PI / 180 )
 				* this.game.player.stats.speed * modifier;
+			var prev_x = this.stars[star].x, prev_y = this.stars[star].y;
 			if ( this.stars[star].x < 0 )
 			{
 				this.stars[star].x += this.game.canvas_div.width - Math.random() * 30;
@@ -65,6 +67,18 @@ star_field.prototype.update = function( modifier )
 			if ( this.stars[star].y > this.game.canvas_div.height )
 			{
 				this.stars[star].y -= this.game.canvas_div.height - Math.random() * 30;
+			}
+			if ( this.stars[star].x != prev_x || this.stars[star].y != prev_y )
+			{
+				this.stars[star] = {
+					x: this.stars[star].x,
+					y: this.stars[star].y,
+					blink_rate: Math.random() * 3,
+					max_radius: Math.random() * 5,
+					radius: Math.random() * 3,
+					increasing: Math.round( Math.random() ),
+					color: this.random_color()
+				}
 			}
 		}
 	}

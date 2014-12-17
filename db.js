@@ -13,8 +13,9 @@ for ( database in db )
 	{
 		db[ database ] = new PouchDB( database );
 	}
-	// var remoteCouch = location.origin + ':5984/' + stats_database;
-	var remoteCouch = 'http://carpoolme.net' + ':5984/' + database;
+	var remoteCouch = location.origin + ':5984/' + stats_database;
+	// var remoteCouch = 'http://carpoolme.net' + ':5984/' + database;
+	//var remoteCouch = 'http://192.168.1.29' + ':5984/' + database;
 	db[ database ].replicate.to( remoteCouch, options );
 	db[ database ].replicate.from( remoteCouch, options );
 }

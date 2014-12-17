@@ -45,6 +45,12 @@ sprite.prototype.update = function( modifier )
 		Object.keys(this.stats.keys_down).length > 0 &&
 		this.angle_of() )
 	{
+		if ( this.stats.speed < 0 )
+			this.stats.speed = 0;
+		if ( this.stats.warp && this.stats.speed + this.stats.acceleration <= this.stats.max_warp )
+			this.stats.speed += this.stats.acceleration;
+		else if ( this.stats.speed + this.stats.acceleration <= this.stats.max_speed )
+			this.stats.speed += this.stats.acceleration * 2 * modifier;
 		var to_angle = this.angle_of() - this.angle;
 		if ( to_angle < 0 )
 		{
@@ -76,6 +82,18 @@ sprite.prototype.update = function( modifier )
 				this.angle += this.stats.rate_of_turn / 10;
 			}
 		}
+		this.stats.x += Math.cos( this.angle * Math.PI / 180 )
+			* this.stats.speed * modifier;
+		this.stats.y += Math.sin( this.angle * Math.PI / 180 )
+			* this.stats.speed * modifier;
+		return true;
+	}
+	else if ( this.stats.speed > 0 )
+	{
+		if ( this.stats.warp )
+			this.stats.speed -= this.stats.acceleration;
+		else
+			this.stats.speed -= this.stats.acceleration * 2 * modifier;
 		this.stats.x += Math.cos( this.angle * Math.PI / 180 )
 			* this.stats.speed * modifier;
 		this.stats.y += Math.sin( this.angle * Math.PI / 180 )

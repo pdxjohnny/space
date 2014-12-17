@@ -85,7 +85,11 @@ player.prototype.load = function( load_image )
 					keys_down: {},
 					x: 0,
 					y: 0,
-					speed: 200,
+					max_speed: 200,
+					speed: 0,
+					acceleration: 30,
+					max_warp: 500,
+					warp: false,
 					rate_of_turn: 30
 				};
 			}
