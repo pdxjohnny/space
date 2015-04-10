@@ -39,7 +39,7 @@ Author: John Andersen
 
 	<!-- Favicons
 	================================================== -->
-	<link rel="shortcut icon" href="images/favicon.ico">
+	<!-- <link rel="shortcut icon" href="images/favicon.ico"> -->
 	<link rel="apple-touch-icon" href="images/apple-touch-icon.png">
 	<link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png">
 	<link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png">
@@ -50,7 +50,7 @@ Author: John Andersen
 	<script src="pouchdb.js"></script>
 	<script src="db.js" ></script>
 	<script src="canvas.js" ></script>
-	<script src="main.js" ></script>
+	<script src="game.js" ></script>
 	<script src="ui.js" ></script>
 	<script src="sprite.js" ></script>
 	<script src="player.js" ></script>
@@ -202,6 +202,6 @@ creator = new create( 'game_canvas' );
 main_game.start();
 
 main_game.add_player( 'thorjohn' );
-main_game.control( 'thorjohn' );
 main_game.add_player( 'pdxjohnny' );
+main_game.control( 'thorjohn' );
 </script>

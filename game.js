@@ -1,5 +1,6 @@
 var game = function game ()
 {
+	this.all = {};
 	this.front = {};
 	this.middle = {};
 	this.back = {};

@@ -142,6 +142,6 @@ player.prototype.update_stats = function( stats )
 		this.show = true;
 	}
 	delete this.stats.image;
-	console.log( this.stats._id + ' loaded stats');
+	console.log( this.stats._id + ' loaded stats', this );
 }
 

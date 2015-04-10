@@ -2,6 +2,7 @@ var space = function space ( canvas_div_id )
 {
 	this.set_canvas( canvas_div_id );
 	this.full_screen();
+	this.all = {};
 	this.front = {};
 	this.middle = {};
 	this.back = {};
@@ -47,13 +48,15 @@ space.prototype.control = function ( name )
 	{
 		this.player.stop_movement();
 	}
-	this.player = this.middle[ name ];
+	this.player = this.all[ name ];
 	this.player.start_movement( this.canvas_div );
 }
 
 space.prototype.add_player = function( name )
 {
-	this.middle[ name ] = new player( name );
+	var add = new player( name );
+	this.all[ name ] = add;
+	this.middle[ name ] = add;
 }
 
 
