@@ -46,65 +46,39 @@ player.prototype.create_key_up_event = function() {
 }
 
 player.prototype.save = function() {
-  db[stats_database].put(this.stats, function(player) {
-    return function(error, result) {
-      if (!error) {
-        console.log('Successfully saved stats');
-        player.load(false);
-      } else {
-        console.log(error, result);
-      }
-    }
-  }(this));
+  db[stats_database].put(this.stats._id, this.stats)
+    .then(function(stats) {
+      console.log('Successfully saved stats', stats);
+    })
+    .catch(function(error) {
+      console.log(error);
+    });
 }
 
 player.prototype.load = function(load_image) {
-  db[stats_database].get(this.stats._id).catch(function(player) {
-    return function(err) {
-      if (err.status === 404) {
-        return {
-          _id: player.stats._id,
-          ship: 'default',
-          keys_down: {},
-          x: 0,
-          y: 0,
-          max_speed: 200,
-          speed: 0,
-          acceleration: 30,
-          max_warp: 500,
-          warp: false,
-          rate_of_turn: 30
-        };
-      } else {
-        throw err;
-      }
-    }
-  }(this)).then(function(player) {
-    return function(stats) {
-      if (typeof load_image === 'undefined' ||
-        load_image) {
-        db[ships_database].get(stats.ship).catch(function(err) {
-          if (err.status === 404) {
-            return {
-              _id: 'default',
-              image: 'default'
-            };
-          } else {
-            throw err;
-          }
-        }).then(function(player) {
-          return function(image) {
-            stats.image = image.image;
-            player.update_stats(stats);
-          };
-        }(player));
-      } else {
-        player.update_stats(stats);
-      }
-    }
-  }(this)).catch(function(err) {
-    // handle any errors
-  });
+  db[stats_database].get(this.stats._id)
+    .then(function(stats) {
+      console.log('Successfully loaded stats', stats, this);
+      this.update_stats(stats);
+    }.bind(this))
+    .catch(function(error) {
+      console.log("ERROR loading stats", error);
+      console.log("About to set default stats", this);
+      this.update_stats({
+        _id: this.stats._id,
+        ship: 'default',
+        keys_down: {},
+        x: 0,
+        y: 0,
+        max_speed: 200,
+        speed: 0,
+        acceleration: 30,
+        max_warp: 500,
+        warp: false,
+        image: 'default',
+        rate_of_turn: 30
+      });
+    }.bind(this));
 }
 
 player.prototype.update_stats = function(stats) {
