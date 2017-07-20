@@ -1,11 +1,18 @@
 var player = function player(name) {
   this.stats._id = name;
-  this.image = new Image();
-  this.load();
+  this.image = this.newImage();
   this.key_down_event = this.create_key_down_event();
   this.key_up_event = this.create_key_up_event();
+  if (typeof db === 'undefined') {
+    db = require("./db.js");
+  }
+  this.db = db;
+  this.load();
 }
 
+if (typeof sprite === 'undefined') {
+  sprite = require("./sprite.js");
+}
 player.prototype = new sprite();
 player.prototype.constructor = player;
 
@@ -46,7 +53,7 @@ player.prototype.create_key_up_event = function() {
 }
 
 player.prototype.save = function() {
-  db[stats_database].put(this.stats._id, this.stats)
+  this.db.Stats.put(this.stats._id, this.stats)
     .then(function(stats) {
       console.log('Successfully saved stats', stats);
     })
@@ -55,8 +62,8 @@ player.prototype.save = function() {
     });
 }
 
-player.prototype.load = function(load_image) {
-  db[stats_database].get(this.stats._id)
+player.prototype.load = function() {
+  this.db.Stats.get(this.stats._id)
     .then(function(stats) {
       console.log('Successfully loaded stats', stats, this);
       this.update_stats(stats);
@@ -88,5 +95,9 @@ player.prototype.update_stats = function(stats) {
     this.show = true;
   }
   delete this.stats.image;
-  console.log(this.stats._id + ' loaded stats', this);
+  console.log(this.stats._id, 'loaded stats:', this);
+}
+
+if (typeof module === 'object') {
+  module.exports = player;
 }

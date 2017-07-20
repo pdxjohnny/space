@@ -1,5 +1,5 @@
 var sprite = function sprite() {
-  this.image = new Image();
+  this.image = this.newImage();
   this.show = false;
   this.stats = {
     keys_down: {},
@@ -9,6 +9,14 @@ var sprite = function sprite() {
   this.x = 0;
   this.y = 0;
   this.angle = 0;
+}
+
+sprite.prototype.newImage= function() {
+  var image = {};
+  if (typeof Image !== "undefined") {
+    image = new Image();
+  }
+  return image;
 }
 
 sprite.prototype.key_down = function(event) {
@@ -151,4 +159,8 @@ sprite.prototype.shield_color = function shield_color() {
     return "255, 247, 100";
   else
     return "217, 108, 85";
+}
+
+if (typeof module === 'object') {
+  module.exports = sprite;
 }

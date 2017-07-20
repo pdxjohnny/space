@@ -1,10 +1,31 @@
-var stats_database = 'space';
-var ships_database = 'spaceships';
+class FakeLocalStorage {
+  constructor() {
+    this.storage = {};
+  }
+
+  getItem(key) {
+    var value = this.storage[key];
+    if (typeof value === "undefined") {
+      return null;
+    }
+    return value;
+  }
+
+  setItem(key, value) {
+    this.storage[key] = value;
+  }
+}
 
 class LocalDatabase {
   constructor(dbName) {
     this.dbName = dbName;
-    this.storage = window.localStorage;
+    if (typeof window !== "undefined" &&
+      typeof window.localStorage !== "undefined") {
+      this.storage = window.localStorage;
+    } else {
+      console.warn("Using FakeLocalStorage");
+      this.storage = new FakeLocalStorage();
+    }
   }
 
   get(key) {
@@ -27,9 +48,15 @@ class LocalDatabase {
         reject(err);
       }
     });
-  };
+  }
 }
 
-var db = {};
-db[stats_database] = new LocalDatabase(stats_database);
-db[ships_database] = new LocalDatabase(ships_database);
+var stats_database = 'space';
+var ships_database = 'spaceships';
+var db = {
+  Stats: new LocalDatabase(stats_database),
+  Ships: new LocalDatabase(ships_database)
+};
+if (typeof module === "object") {
+  module.exports = db;
+}
