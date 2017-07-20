@@ -11,7 +11,7 @@ var sprite = function sprite() {
   this.angle = 0;
 }
 
-sprite.prototype.newImage= function() {
+sprite.prototype.newImage = function() {
   var image = {};
   if (typeof Image !== "undefined") {
     image = new Image();

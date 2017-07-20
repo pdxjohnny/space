@@ -17,14 +17,19 @@ class FakeLocalStorage {
 }
 
 class LocalDatabase {
-  constructor(dbName) {
+  constructor(dbName, prepopulate) {
     this.dbName = dbName;
     if (typeof window !== "undefined" &&
       typeof window.localStorage !== "undefined") {
       this.storage = window.localStorage;
     } else {
-      console.warn("Using FakeLocalStorage");
+      // console.warn("Using FakeLocalStorage");
       this.storage = new FakeLocalStorage();
+    }
+    if (typeof prepopulate === "object") {
+      for (var i in prepopulate) {
+        this.put(i, prepopulate[i]);
+      }
     }
   }
 
@@ -42,6 +47,7 @@ class LocalDatabase {
   put(key, value) {
     return new Promise((resolve, reject) => {
       try {
+        // console.log("DB: setting:", key, "=", value);
         this.storage.setItem(this.dbName + "_" + key, value);
         resolve(value);
       } catch (err) {
@@ -51,11 +57,24 @@ class LocalDatabase {
   }
 }
 
-var stats_database = 'space';
-var ships_database = 'spaceships';
 var db = {
-  Stats: new LocalDatabase(stats_database),
-  Ships: new LocalDatabase(ships_database)
+  Stats: new LocalDatabase('stats', {
+    testShip: {
+      _id: '',
+      ship: 'testShip',
+      keys_down: {},
+      x: 0,
+      y: 0,
+      max_speed: 200,
+      speed: 0,
+      acceleration: 30,
+      max_warp: 500,
+      warp: false,
+      image: 'testShip',
+      rate_of_turn: 30
+    }
+  }),
+  Ships: new LocalDatabase('ships')
 };
 if (typeof module === "object") {
   module.exports = db;

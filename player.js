@@ -7,7 +7,6 @@ var player = function player(name) {
     db = require("./db.js");
   }
   this.db = db;
-  this.load();
 }
 
 if (typeof sprite === 'undefined') {
@@ -63,29 +62,30 @@ player.prototype.save = function() {
 }
 
 player.prototype.load = function() {
-  this.db.Stats.get(this.stats._id)
-    .then(function(stats) {
-      console.log('Successfully loaded stats', stats, this);
-      this.update_stats(stats);
-    }.bind(this))
-    .catch(function(error) {
-      console.log("ERROR loading stats", error);
-      console.log("About to set default stats", this);
-      this.update_stats({
-        _id: this.stats._id,
-        ship: 'default',
-        keys_down: {},
-        x: 0,
-        y: 0,
-        max_speed: 200,
-        speed: 0,
-        acceleration: 30,
-        max_warp: 500,
-        warp: false,
-        image: 'default',
-        rate_of_turn: 30
-      });
-    }.bind(this));
+  return new Promise((resolve, reject) => {
+    this.db.Stats.get(this.stats._id)
+      .then(function(stats) {
+        this.update_stats(stats);
+        resolve(this.stats);
+      }.bind(this))
+      .catch(function(error) {
+        this.update_stats({
+          _id: this.stats._id,
+          ship: 'default',
+          keys_down: {},
+          x: 0,
+          y: 0,
+          max_speed: 200,
+          speed: 0,
+          acceleration: 30,
+          max_warp: 500,
+          warp: false,
+          image: 'default',
+          rate_of_turn: 30
+        });
+        reject(new Error("Loaded default"));
+      }.bind(this));
+  });
 }
 
 player.prototype.update_stats = function(stats) {
@@ -95,7 +95,7 @@ player.prototype.update_stats = function(stats) {
     this.show = true;
   }
   delete this.stats.image;
-  console.log(this.stats._id, 'loaded stats:', this);
+  // console.log(this.stats._id, 'loaded stats:', this);
 }
 
 if (typeof module === 'object') {
