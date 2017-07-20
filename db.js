@@ -74,7 +74,8 @@ var db = {
       rate_of_turn: 30
     }
   }),
-  Ships: new LocalDatabase('ships')
+  Ships: new LocalDatabase('ships'),
+  LocalDatabase: LocalDatabase
 };
 if (typeof module === "object") {
   module.exports = db;

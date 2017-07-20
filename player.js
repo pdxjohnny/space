@@ -89,7 +89,7 @@ player.prototype.load = function() {
 }
 
 player.prototype.update_stats = function(stats) {
-  this.stats = stats;
+  this.stats = JSON.parse(JSON.stringify(stats));
   if (typeof this.stats.image !== 'undefined') {
     this.image.src = this.stats.image;
     this.show = true;
